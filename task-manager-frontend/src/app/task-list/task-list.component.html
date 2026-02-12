@@ -1,0 +1,122 @@
+<!--
+<h2>Task List</h2>
+<button routerLink="/add">Add New Task</button>
+<button (click)="logout()">Logout</button>
+-->
+
+<div style="margin-top: 2rem; padding: 2rem; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.08); font-family: 'Outfit', sans-serif;">
+  <h3 style="margin-top: 0; color: #1a1a1a; margin-bottom: 1.5rem;">Business Information Lookup</h3>
+  
+  <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 2rem;">
+    <div style="flex-grow: 1;">
+      <label for="orgNumber" style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Organization Number</label>
+      <input type="text" id="orgNumber" [(ngModel)]="organizationNumber" name="orgNumber" 
+             placeholder="e.g. 935650798" 
+             style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;">
+    </div>
+    <button (click)="searchOrganization()" [disabled]="loadingOrg" 
+            style="margin-top: 25px; padding: 12px 24px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s;">
+      {{ loadingOrg ? 'Searching...' : 'Search' }}
+    </button>
+  </div>
+
+  <div *ngIf="orgData" style="margin-top: 1.5rem; color: #1a1a1a; line-height: 1.6;">
+    
+    <!-- Organization Basic Details -->
+    <div style="margin-bottom: 2rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 1rem;">
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Organisation number</div>
+        <div>{{ orgData.orgNumber }}</div>
+      </div>
+      
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Business Address</div>
+        <div style="white-space: pre-line;">{{ orgData.businessAddress }}</div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Municipality, country</div>
+        <div>{{ orgData.municipalityCountry }}</div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Organisasjonsform</div>
+        <div>{{ orgData.orgForm }}</div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Industry code</div>
+        <div>{{ orgData.industryCode }}</div>
+      </div>
+
+      <div *ngIf="orgData.purpose" style="margin-bottom: 1rem;">
+        <div style="font-weight: bold;">Vedtektsfestet formål</div>
+        <div>{{ orgData.purpose }}</div>
+      </div>
+    </div>
+    <div *ngIf="orgData.generalManager" style="margin-bottom: 1rem;">
+      <div style="font-weight: bold;">General Manager / CEO</div>
+      <div>{{ orgData.generalManager }}</div>
+    </div>
+
+    <div *ngIf="orgData.chairman" style="margin-bottom: 1rem;">
+      <div style="font-weight: bold;">Chairman of the Board</div>
+      <div>{{ orgData.chairman }}</div>
+    </div>
+
+    <div *ngIf="orgData.boardMembers.length > 0" style="margin-bottom: 1rem;">
+      <div style="font-weight: bold;">Board Members</div>
+      <div *ngFor="let member of orgData.boardMembers">{{ member }}</div>
+    </div>
+
+    <div *ngIf="orgData.auditor" style="margin-bottom: 1rem;">
+      <div style="font-weight: bold;">Auditor</div>
+      <div>{{ orgData.auditor.name }}</div>
+      <div>Organization Number: {{ orgData.auditor.orgNumber }}</div>
+      <div style="margin-top: 4px;">Business Address:</div>
+      <div style="white-space: pre-line;">{{ orgData.auditor.address }}</div>
+    </div>
+
+    <div *ngIf="orgData.accountant" style="margin-bottom: 1rem;">
+      <div style="font-weight: bold;">Accountant</div>
+      <div>{{ orgData.accountant.name }}</div>
+      <div>Organization Number: {{ orgData.accountant.orgNumber }}</div>
+      <div style="margin-top: 4px;">Business Address:</div>
+      <div style="white-space: pre-line;">{{ orgData.accountant.address }}</div>
+    </div>
+
+    
+  </div>
+</div>
+
+<!--
+<table border="1" cellpadding="8" cellspacing="0" style="margin-top: 2rem; width: 100%;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (task of tasks; track task.id) {
+      <tr>
+        <td>{{ task.id }}</td>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.status }}</td>
+        <td>
+          <button (click)="editTask(task.id)">Edit</button>
+          <button (click)="deleteTask(task.id)">Delete</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="5" style="text-align: center;">No tasks found.</td>
+      </tr>
+    }
+  </tbody>
+</table>
+-->

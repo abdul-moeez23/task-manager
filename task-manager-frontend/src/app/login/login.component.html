@@ -1,0 +1,31 @@
+<p>login works!</p>
+<h2>Login</h2>
+
+<form (ngSubmit)="login()">
+  <div>
+    <label>Username</label><br>
+    <input type="text" [(ngModel)]="username" name="username">
+  </div>
+
+  <br>
+
+  <div>
+    <label>Password</label><br>
+    <input type="password" [(ngModel)]="password" name="password">
+  </div>
+
+  <br>
+
+  <button type="submit">Login</button>
+
+   <p style="color:red" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p> 
+</form>
+
+<p>
+  Don't have an account?
+  <button type="button" (click)="register()" style="cursor:pointer;">
+    Register
+  </button>
+</p>

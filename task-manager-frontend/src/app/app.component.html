@@ -1,0 +1,22 @@
+<!--
+
+<nav style="padding: 1rem; background: #eee; margin-bottom: 1rem;">
+  <a routerLink="/" style="margin-right: 1rem;">Task List</a>
+  <a routerLink="/add">Add Task</a>
+  
+  <span *ngIf="authService.username$ | async as username">
+    Welcome, {{ username }}
+  </span> 
+
+  @if (authService.isLoggedIn()) {
+    <button style="margin-left: 62rem;" (click)="logout()">Logout</button>
+  } @else {
+    <button style="margin-left: 62rem;" routerLink="/login">Login</button>
+  }
+</nav>
+
+-->
+
+<div style="padding: 0 1rem;">
+  <router-outlet />
+</div>

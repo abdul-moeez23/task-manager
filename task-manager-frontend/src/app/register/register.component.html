@@ -1,0 +1,42 @@
+<p>register works!</p>
+<h2>Register</h2>
+
+<form (ngSubmit)="register()">
+  <div>
+    <label>Username</label><br>
+    <input type="text" [(ngModel)]="username" name="username">
+  </div>
+
+  <br>
+
+  <div>
+    <label>Email</label><br>
+    <input type="email" [(ngModel)]="email" name="email">
+  </div>
+
+  <br>
+
+  <div>
+    <label>Password</label><br>
+    <input type="password" [(ngModel)]="password" name="password">
+  </div>
+
+  <br>
+
+  <button type="submit">Register</button>
+
+  <p style="color:red" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p>
+
+  <p style="color:green" *ngIf="successMessage">
+    {{ successMessage }}
+  </p>
+</form>
+
+<p>
+  Already have an account?
+  <button type="button" (click)="login()" style="cursor:pointer;">
+    Login
+  </button>
+</p>

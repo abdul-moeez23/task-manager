@@ -1,0 +1,18 @@
+<p>task-add works!</p>
+<h2>Add New Task</h2>
+<form (ngSubmit)="addTask()">
+  <label>Title:</label><br>
+  <input type="text" [(ngModel)]="task.title" name="title" required /><br><br>
+
+  <label>Description:</label><br>
+  <textarea [(ngModel)]="task.description" name="description"></textarea><br><br>
+
+  <label>Status:</label><br>
+  <select [(ngModel)]="task.status" name="status">
+    <option>Pending</option>
+    <option>Completed</option>
+  </select><br><br>
+
+  <button type="submit">Add Task</button>
+  <button type="button" routerLink="/">Cancel</button>
+</form>
