@@ -166,5 +166,5 @@ steps:
   inputs:
     azureSubscription: 'Moeez-Azure-Connection'  # Your Azure Service Connection
     appName: 'taskmanager-ui'  # Azure App Service name for UI
-    package: '$(Build.SourcesDirectory)/task-manager-frontend/dist'  # Path to Angular build output folder
+    package: '$(Build.SourcesDirectory)/task-manager-frontend/dist/task-manager-frontend'  # Point to the inner folder containing index.html
   displayName: 'Deploy Angular App to Azure'
