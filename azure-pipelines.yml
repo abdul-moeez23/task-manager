@@ -139,10 +139,11 @@ steps:
     appName: 'taskmanager-api'  # Azure App Service name for API
     package: '$(Build.ArtifactStagingDirectory)/*'
 
+
 # 7️⃣ Install Node.js (for frontend)
 - task: NodeTool@0
   inputs:
-    versionSpec: '16.x'
+    versionSpec: '20.x'   # Angular 19 requires Node.js ^18.19.1 || ^20.11.1 || >=22.0.0
   displayName: 'Install Node.js'
 
 # 8️⃣ Install Angular dependencies (for frontend)
@@ -155,7 +156,8 @@ steps:
 # 9️⃣ Build the Angular app (for frontend)
 - task: Npm@1
   inputs:
-    command: 'run build -- --configuration production'
+    command: 'custom'   # Use custom command to run scripts
+    customCommand: 'run build -- --configuration production'  # Correct syntax for passing args to npm run
     workingDir: '$(Build.SourcesDirectory)/task-manager-frontend'  # Path to frontend
   displayName: 'Build Angular App'
 
