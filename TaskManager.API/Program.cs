@@ -28,6 +28,8 @@ builder.Services.AddDbContext<TaskDbContext>(options =>
 );
 
 // CORS (Angular)
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AllowAngular",
         policy => policy.SetIsOriginAllowed(origin => true) // Allow any origin (Azure frontend, localhost, etc.)
                         .AllowAnyMethod()
