@@ -1,0 +1,15 @@
+# .NET build folders
+bin/
+obj/
+publish/
+
+# Angular build folders
+dist/
+node_modules/
+
+# User-specific files
+.vscode/
+.idea/
+
+# Npm debug log
+npm-debug.log
