@@ -28,12 +28,11 @@ builder.Services.AddDbContext<TaskDbContext>(options =>
 );
 
 // CORS (Angular)
-builder.Services.AddCors(options =>
-{
     options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins("http://localhost:4200")
+        policy => policy.SetIsOriginAllowed(origin => true) // Allow any origin (Azure frontend, localhost, etc.)
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials());
 });
 
 // 🔐 Authentication + JWT (MUST be before Build)
@@ -89,14 +88,17 @@ var app = builder.Build();
 
 // -------------------- MIDDLEWARE --------------------
 
+// Enable Swagger in all environments (including Azure Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskManager API V1");
+    c.RoutePrefix = string.Empty; // Launch Swagger at root URL
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskManager API V1");
-        c.RoutePrefix = string.Empty;
-    });
+    // Development-specific middleware can go here
 }
 
 
