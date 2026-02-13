@@ -161,6 +161,12 @@ steps:
     workingDir: '$(Build.SourcesDirectory)/task-manager-frontend'  # Path to frontend
   displayName: 'Build Angular App'
 
+# copy server.js and package.json to the dist folder for deployment
+- script: |
+    copy "$(Build.SourcesDirectory)\task-manager-frontend\server.js" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\server.js"
+    copy "$(Build.SourcesDirectory)\task-manager-frontend\deploy-package.json" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\package.json"
+  displayName: 'Copy Server and Package Config'
+
 # 🔟 Deploy the frontend UI to Azure App Service
 - task: AzureWebApp@1
   inputs:
