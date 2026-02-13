@@ -22,6 +22,69 @@
 # Backend .NET 9 Azure DevOps Pipeline
 # Build, Test, Publish, Deploy .NET 9 API to Azure App Service
 
+# trigger:
+#   branches:
+#     include:
+#       - main   # Run pipeline on push to main branch
+
+# pool:
+#   name: 'Default'
+
+# variables:
+#   buildConfiguration: 'Release'
+#   solution: 'TaskManager.API/TaskManager.API.sln'   # agar solution file hai
+#   projectPath: 'TaskManager.API/TaskManager.API.csproj'
+
+# steps:
+# # 1️⃣ Install .NET SDK
+# - task: UseDotNet@2
+#   inputs:
+#     packageType: 'sdk'
+#     version: '9.0.x'    # Match local SDK
+#     includePreviewVersions: true
+
+# # 2️⃣ Restore NuGet packages
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'restore'
+#     projects: '$(solution)'
+
+# # 3️⃣ Build the solution
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'build'
+#     projects: '$(solution)'
+#     arguments: '--configuration $(buildConfiguration)'
+
+# # 4️⃣ Run unit tests (optional, if you have tests)
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'test'
+#     projects: '$(solution)'
+#     arguments: '--configuration $(buildConfiguration)'
+
+# # 5️⃣ Publish the project (prepare for deployment)
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'publish'
+#     projects: '$(projectPath)'
+#     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+# # 6️⃣ Deploy to Azure App Service
+# - task: AzureWebApp@1
+#   inputs:
+#     azureSubscription: 'Moeez-Azure-Connection'
+#     appType: 'webApp'
+#     appName: 'taskmanager-api'
+#     package: '$(Build.ArtifactStagingDirectory)/*'
+
+
+
+
+
+
+
+
 trigger:
   branches:
     include:
@@ -30,50 +93,72 @@ trigger:
 pool:
   name: 'Default'
 
-variables:
-  buildConfiguration: 'Release'
-  solution: 'TaskManager.API/TaskManager.API.sln'   # agar solution file hai
-  projectPath: 'TaskManager.API/TaskManager.API.csproj'
-
 steps:
-# 1️⃣ Install .NET SDK
+# 1️⃣ Install .NET SDK (for backend)
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '9.0.x'    # Match local SDK
+    version: '6.x'    # Match local SDK version
     includePreviewVersions: true
 
-# 2️⃣ Restore NuGet packages
+# 2️⃣ Restore NuGet packages (for backend)
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
     projects: '$(solution)'
 
-# 3️⃣ Build the solution
+# 3️⃣ Build the solution (for backend)
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)'
 
-# 4️⃣ Run unit tests (optional, if you have tests)
+# 4️⃣ Run unit tests (optional, if you have tests) (for backend)
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)'
 
-# 5️⃣ Publish the project (prepare for deployment)
+# 5️⃣ Publish the project (prepare for backend deployment)
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-# 6️⃣ Deploy to Azure App Service
+# 6️⃣ Deploy the backend API to Azure App Service (taskmanager-api)
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'Moeez-Azure-Connection'
     appType: 'webApp'
     appName: 'taskmanager-api'
     package: '$(Build.ArtifactStagingDirectory)/*'
+
+# 7️⃣ Install Angular dependencies and build (for frontend)
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: '$(Build.SourcesDirectory)/task-manager-frontend'
+  displayName: 'Install Frontend Dependencies'
+
+- task: Npm@1
+  inputs:
+    command: 'run build -- --configuration production'
+    workingDir: '$(Build.SourcesDirectory)/task-manager-frontend'
+  displayName: 'Build Angular App'
+
+# 8️⃣ Deploy the frontend UI to Azure App Service (taskmanager-ui)
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Moeez-Azure-Connection'
+    appName: 'taskmanager-ui'
+    package: '$(Build.SourcesDirectory)/task-manager-frontend/dist'
+  displayName: 'Deploy Angular App to Azure'
+
