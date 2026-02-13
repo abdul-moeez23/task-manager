@@ -163,8 +163,8 @@ steps:
 
 # copy server.js and package.json to the dist folder for deployment
 - script: |
-    copy "$(Build.SourcesDirectory)\task-manager-frontend\server.js" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\server.js"
-    copy "$(Build.SourcesDirectory)\task-manager-frontend\deploy-package.json" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\package.json"
+    copy "$(Build.SourcesDirectory)\task-manager-frontend\server.js" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\browser\server.js"
+    copy "$(Build.SourcesDirectory)\task-manager-frontend\deploy-package.json" "$(Build.SourcesDirectory)\task-manager-frontend\dist\task-manager-frontend\browser\package.json"
   displayName: 'Copy Server and Package Config'
 
 # 🔟 Deploy the frontend UI to Azure App Service
@@ -172,5 +172,5 @@ steps:
   inputs:
     azureSubscription: 'Moeez-Azure-Connection'  # Your Azure Service Connection
     appName: 'taskmanager-ui'  # Azure App Service name for UI
-    package: '$(Build.SourcesDirectory)/task-manager-frontend/dist/task-manager-frontend'  # Point to the inner folder containing index.html
+    package: '$(Build.SourcesDirectory)/task-manager-frontend/dist/task-manager-frontend/browser'  # Point to the inner 'browser' folder containing index.html
   displayName: 'Deploy Angular App to Azure'
