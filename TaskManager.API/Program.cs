@@ -111,5 +111,27 @@ app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-app.Run();
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    // -------------------- AUTO-MIGRATION --------------------
+    // Automatically apply pending migrations on startup (Crucial for Azure)
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<TaskDbContext>();
+            context.Database.Migrate(); // Creates DB if not exists & applies migrations
+            Console.WriteLine("Database migrated successfully.");
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred while migrating the database.");
+        }
+    }
+
+    app.Run();
