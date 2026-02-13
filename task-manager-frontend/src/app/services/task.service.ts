@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateTaskDto, UpdateTaskDto } from '../models/task-dto'; // DTO import
+import { environment } from '../../environments/environment';
+
 export interface Task {
     id?: number;
     title: string;
@@ -14,7 +16,7 @@ export interface Task {
     providedIn: 'root'
 })
 export class TaskService {
-    private apiUrl = 'http://localhost:5124/api/Task'; // backend URL
+    private apiUrl = environment.apiUrl + '/Task'; // Dynamic backend URL
 
     constructor(private http: HttpClient) { }
 

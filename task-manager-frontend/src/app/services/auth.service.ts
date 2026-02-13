@@ -7,6 +7,7 @@ import { LoginDto } from '../models/login.dto';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { VerifyEmailDto } from '../models/verify-email.dto';
+import { environment } from '../../environments/environment';
 
 interface LoginResponse {
     token: string;
@@ -17,7 +18,7 @@ interface LoginResponse {
     providedIn: 'root'
 })
 export class AuthService {
-    private apiUrl = 'http://localhost:5124/api/auth';
+    private apiUrl = environment.apiUrl + '/auth';
     private tokenKey = 'jwtToken';
     public username$ = new BehaviorSubject<string | null>(null);
 
