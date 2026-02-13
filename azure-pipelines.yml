@@ -28,7 +28,7 @@ trigger:
       - main   # Run pipeline on push to main branch
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
 
 variables:
   buildConfiguration: 'Release'
