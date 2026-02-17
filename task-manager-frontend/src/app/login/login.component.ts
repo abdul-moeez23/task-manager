@@ -45,7 +45,12 @@ export class LoginComponent {
           progressBar: true,     // Progress bar hata diya
           positionClass: 'toast-top-right'
         });
-        this.router.navigate(['/']);
+        const role = this.authService.getRole();
+        if (role === 'User') {
+          this.router.navigate(['/user-dashboard']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: () => {
         /* this.errorMessage = 'Invalid username or password';*/

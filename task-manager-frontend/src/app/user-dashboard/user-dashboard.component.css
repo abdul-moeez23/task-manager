@@ -1,0 +1,206 @@
+/* Main Container */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 260px;
+    background-color: #262f3d; /* Dark charcoal/blue tint */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+    z-index: 1000;
+}
+
+.logo-section {
+    padding: 20px;
+    background-color: #fff; /* White part of logo area */
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ff5722; /* Orange line */
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #262f3d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #4fc3f7; /* Light blue diamond */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    color: #b0bec5;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 14px;
+}
+
+.menu-item:hover {
+    background-color: #37474f;
+    color: #fff;
+}
+
+.menu-item.active {
+    background-color: #37474f;
+    color: #fff;
+    border-left: 4px solid #ff5722; /* Orange highlight */
+}
+
+.menu-item i, .menu-item svg {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    margin-left: 260px; /* Width of sidebar */
+    background-color: #f5f7fa;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styling */
+.header {
+    background-color: #fff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.welcome-text {
+    font-size: 14px;
+    color: #262f3d;
+    font-weight: 500;
+}
+
+.welcome-role {
+    color: #ff5722; /* Orange role text */
+    font-weight: bold;
+}
+
+.user-profile {
+    width: 35px;
+    height: 35px;
+    background-color: #ffccbc; /* Light orange bg */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #bf360c;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Page Content */
+.page-content {
+    padding: 30px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #262f3d;
+    margin-bottom: 20px;
+}
+
+/* Form Card */
+.content-card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #262f3d;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #546e7a;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #37474f;
+    outline: none;
+    background-color: #fff;
+}
+
+.form-control:focus {
+    border-color: #ff5722;
+}
+
+.form-control::placeholder {
+    color: #b0bec5;
+}
+
+/* Adjustments for date inputs to look consistent */
+input[type="date"] {
+    color: #78909c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    .logo-text span, .menu-item span {
+        display: none;
+    }
+    .main-content {
+        margin-left: 60px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
