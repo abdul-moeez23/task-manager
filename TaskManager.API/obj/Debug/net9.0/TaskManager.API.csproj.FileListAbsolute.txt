@@ -83,3 +83,10 @@ D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\Microsoft.
 D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
 D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\MailKit.dll
 D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\MimeKit.dll
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\web.config
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\appsettings.Development.json
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\appsettings.json
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\TaskManager.API.deps.json
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\TaskManager.API.runtimeconfig.json
+D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\TaskManager.API.staticwebassets.endpoints.json
+D:\University\New folder\TaskManager\TaskManager.API\obj\Debug\net9.0\TaskManager.API.sourcelink.json
