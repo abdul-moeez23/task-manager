@@ -10,27 +10,47 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   username = '';
   password = '';
   errorMessage = '';
 
+  // UI state
+  usernameFocused = false;
+  passwordFocused = false;
+  showPassword = false;
+  isLoading = false;
+  shakeForm = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService
-
   ) { }
+
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      if (localStorage.getItem('isAdmin') === 'true') {
+        this.router.navigate(['/admin-dashboard']);
+      } else {
+        this.router.navigate(['/user-dashboard']);
+      }
+    }
+  }
 
   login() {
     if (!this.username || !this.password) {
-      /*  this.errorMessage = 'Username and password are required';*/
       this.toastr.error('Username and password are required');
-
+      this.shakeForm = true;
       return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
     const dto: LoginDto = {
       username: this.username,
       password: this.password
@@ -38,24 +58,26 @@ export class LoginComponent {
 
     this.authService.login(dto).subscribe({
       next: () => {
+        this.isLoading = false;
         this.toastr.success('Login successful', '', {
-          timeOut: 2000,          // 2 seconds
-          closeButton: true,     // Close button hata diya
-          tapToDismiss: true,     // Click karne se close ho jaye
-          progressBar: true,     // Progress bar hata diya
+          timeOut: 2000,
+          closeButton: true,
+          tapToDismiss: true,
+          progressBar: true,
           positionClass: 'toast-top-right'
         });
-        const role = this.authService.getRole();
-        if (role === 'User') {
-          this.router.navigate(['/user-dashboard']);
+
+        // Use the isAdmin flag stored by AuthService to decide navigation
+        if (localStorage.getItem('isAdmin') === 'true') {
+          this.router.navigate(['/admin-dashboard']);
         } else {
-          this.router.navigate(['/']);
+          this.router.navigate(['/user-dashboard']);
         }
       },
       error: () => {
-        /* this.errorMessage = 'Invalid username or password';*/
+        this.isLoading = false;
         this.toastr.error('Invalid username or password');
-
+        this.shakeForm = true;
       }
     });
   }

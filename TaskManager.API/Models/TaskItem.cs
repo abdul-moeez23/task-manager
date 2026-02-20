@@ -12,7 +12,7 @@ namespace TaskManager.API.Models
         public string Title { get; set; } = null!;
         // [Required]
         // [MaxLength(255)]
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
         // [Required]
         // [MaxLength(20)]
         public string Status { get; set; } = "Pending";

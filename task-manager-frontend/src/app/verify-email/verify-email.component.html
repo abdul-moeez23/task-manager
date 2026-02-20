@@ -1,33 +1,56 @@
-<h2>Verify Your Email</h2>
+<div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+</div>
 
-<form (ngSubmit)="verify()">
-  <input
-    type="email"
-    [(ngModel)]="email"
-    name="email"
-    placeholder="Email"
-    required
-  />
+<div class="verify-card">
+    <div class="verify-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            <path d="m16 19 2 2 4-4" />
+        </svg>
+    </div>
 
-  <input
-    type="text"
-    [(ngModel)]="otp"
-    name="otp"
-    placeholder="Enter OTP"
-    required
-  />
+    <h2 class="verify-title">Verify Your Email</h2>
+    <p class="verify-desc">
+        Entering the secure 6-digit code we've sent to
+        <span class="email-highlight">{{ email }}</span>
+    </p>
 
-  <button type="submit">Verify</button>
-</form>
+    <!-- EXPIRY TIMER UI -->
+    <div class="timer-display" [class.expired]="expirySeconds <= 0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Code expires in: <b>{{ formatTime(expirySeconds) }}</b></span>
+    </div>
 
-<p style="margin-top: 10px; font-size: 14px;">
-  Didn’t receive the code?
-  <button
-    type="button"
-    (click)="resendOtp()"
-    [disabled]="cooldown > 0"
-    style="background:none;border:none;color:blue;cursor:pointer;text-decoration:underline;"
-  >
-    Resend OTP {{ cooldown > 0 ? '(' + cooldown + 's)' : '' }}
-  </button>
-</p>
+    <form class="otp-form" (ngSubmit)="verify()">
+        <div class="input-group">
+            <label class="input-label">Verification Code</label>
+            <input type="text" [(ngModel)]="otp" name="otp" placeholder="000000" maxlength="6" class="otp-input"
+                required autocomplete="one-time-code" (input)="errorMessage = ''" />
+        </div>
+
+        <!-- INLINE ERROR MESSAGE - PROFESSIONAL PLACEMENT -->
+        <div class="inline-error" *ngIf="errorMessage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>{{ errorMessage }}</span>
+        </div>
+
+        <button type="submit" [disabled]="otp.length < 6 || isLoading || expirySeconds <= 0" class="verify-btn">
+            <span *ngIf="!isLoading">Verify Identity</span>
+            <div *ngIf="isLoading" class="loader"></div>
+            <span *ngIf="isLoading">Verifying...</span>
+        </button>
+    </form>
+
+    <div class="resend-container">
+        <p class="resend-text">
+            Didn’t receive the code?
+            <button type="button" (click)="resendOtp()" [disabled]="cooldown > 0" class="resend-btn">
+                {{ cooldown > 0 ? 'Wait ' + cooldown + 's' : 'Resend Code' }}
+            </button>
+        </p>
+    </div>
+</div>

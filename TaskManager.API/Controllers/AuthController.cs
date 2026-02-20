@@ -44,7 +44,7 @@ namespace TaskManager.API.Controllers
 
             string code = EmailHelper.GenerateOtp();
             user.EmailVerificationCode = code;
-            user.EmailVerificationExpiry = DateTime.UtcNow.AddMinutes(10);
+            user.EmailVerificationExpiry = DateTime.UtcNow.AddMinutes(3);
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -61,9 +61,18 @@ namespace TaskManager.API.Controllers
         }
 
 
+        private const string AdminUsername = "admin";
+        private const string AdminPassword = "Admin@123";
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
+            // Check for admin first
+            if (dto.Username == AdminUsername && dto.Password == AdminPassword)
+            {
+                return Ok(new { token = "admin-session-token", username = "Admin", isAdmin = true });
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return Unauthorized("Invalid credentials");
@@ -72,7 +81,7 @@ namespace TaskManager.API.Controllers
                 return BadRequest("Please verify your email before logging in.");
 
             var token = GenerateJwtToken(user);
-            return Ok(new { token, username = user.Username });
+            return Ok(new { token, username = user.Username, isAdmin = false });
         }
 
         private string GenerateJwtToken(User user)
@@ -106,8 +115,11 @@ namespace TaskManager.API.Controllers
             if (user == null) return BadRequest("User not found");
             if (user.IsEmailVerified) return BadRequest("Email already verified");
 
-            if (user.EmailVerificationCode != dto.Otp || user.EmailVerificationExpiry < DateTime.UtcNow)
-                return BadRequest("Invalid or expired code");
+            if (user.EmailVerificationCode != dto.Otp)
+                return BadRequest("The code you entered is incorrect. Please check and try again.");
+
+            if (user.EmailVerificationExpiry < DateTime.UtcNow)
+                return BadRequest("Your verification code has expired. Please use the 'Resend Code' button to get a new one.");
 
             user.IsEmailVerified = true;
             user.EmailVerificationCode = null;
@@ -130,7 +142,7 @@ namespace TaskManager.API.Controllers
 
             string code = EmailHelper.GenerateOtp();
             user.EmailVerificationCode = code;
-            user.EmailVerificationExpiry = DateTime.UtcNow.AddMinutes(10);
+            user.EmailVerificationExpiry = DateTime.UtcNow.AddMinutes(3);
 
             _context.SaveChanges();
             

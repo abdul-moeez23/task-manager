@@ -1,42 +1,144 @@
-<p>register works!</p>
-<h2>Register</h2>
-
-<form (ngSubmit)="register()">
-  <div>
-    <label>Username</label><br>
-    <input type="text" [(ngModel)]="username" name="username">
+<!-- Animated Background -->
+<div class="auth-bg">
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+    <div class="shape shape-6"></div>
   </div>
 
-  <br>
+  <!-- Register Card -->
+  <div class="auth-container" [class.shake]="shakeForm" (animationend)="shakeForm = false">
+    <!-- Brand -->
+    <div class="brand-section">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="8.5" cy="7" r="4" />
+          <line x1="20" y1="8" x2="20" y2="14" />
+          <line x1="23" y1="11" x2="17" y2="11" />
+        </svg>
+      </div>
+      <h1 class="brand-title">Create Account</h1>
+      <p class="brand-subtitle">Join TaskManager to get started</p>
+    </div>
 
-  <div>
-    <label>Email</label><br>
-    <input type="email" [(ngModel)]="email" name="email">
+    <!-- Register Form -->
+    <form (ngSubmit)="register()" class="auth-form">
+      <!-- Username -->
+      <div class="input-group" [class.focused]="usernameFocused" [class.has-value]="username.length > 0">
+        <div class="input-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="username" name="username" id="reg-username" required
+            autocomplete="username"
+            (focus)="usernameFocused = true" (blur)="usernameFocused = false" />
+          <label for="reg-username">Username</label>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group" [class.focused]="emailFocused" [class.has-value]="email.length > 0">
+        <div class="input-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </div>
+        <div class="input-wrapper">
+          <input type="email" [(ngModel)]="email" name="email" id="reg-email" required
+            autocomplete="email"
+            (focus)="emailFocused = true" (blur)="emailFocused = false" />
+          <label for="reg-email">Email Address</label>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group" [class.focused]="passwordFocused" [class.has-value]="password.length > 0">
+        <div class="input-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <div class="input-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
+            id="reg-password" required autocomplete="new-password"
+            (focus)="passwordFocused = true" (blur)="passwordFocused = false" />
+          <label for="reg-password">Password</label>
+        </div>
+        <button type="button" class="toggle-password" (click)="showPassword = !showPassword" tabindex="-1">
+          <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+            <line x1="1" y1="1" x2="23" y2="23" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Error -->
+      <div class="error-message" *ngIf="errorMessage">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="15" y1="9" x2="9" y2="15" />
+          <line x1="9" y1="9" x2="15" y2="15" />
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Success -->
+      <div class="success-message" *ngIf="successMessage">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <!-- Register Button -->
+      <button type="submit" class="submit-btn" [disabled]="isLoading">
+        <span class="btn-text" *ngIf="!isLoading">Create Account</span>
+        <div class="btn-loader" *ngIf="isLoading">
+          <div class="spinner"></div>
+          <span>Creating account...</span>
+        </div>
+        <div class="btn-shine"></div>
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <!-- Login Link -->
+    <div class="alt-action-section">
+      <p>Already have an account?</p>
+      <button type="button" class="alt-btn" (click)="login()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+        Sign In
+      </button>
+    </div>
   </div>
-
-  <br>
-
-  <div>
-    <label>Password</label><br>
-    <input type="password" [(ngModel)]="password" name="password">
-  </div>
-
-  <br>
-
-  <button type="submit">Register</button>
-
-  <p style="color:red" *ngIf="errorMessage">
-    {{ errorMessage }}
-  </p>
-
-  <p style="color:green" *ngIf="successMessage">
-    {{ successMessage }}
-  </p>
-</form>
-
-<p>
-  Already have an account?
-  <button type="button" (click)="login()" style="cursor:pointer;">
-    Login
-  </button>
-</p>
+</div>

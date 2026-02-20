@@ -76,5 +76,17 @@
         <member name="M:TaskManager.API.Migrations.AddEmailVerification.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:TaskManager.API.Migrations.AddBusinessPartnerTable">
+            <inheritdoc />
+        </member>
+        <member name="M:TaskManager.API.Migrations.AddBusinessPartnerTable.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TaskManager.API.Migrations.AddBusinessPartnerTable.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TaskManager.API.Migrations.AddBusinessPartnerTable.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

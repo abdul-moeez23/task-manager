@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-verify-email',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './verify-email.component.html',
   styleUrl: './verify-email.component.css'
@@ -16,10 +17,14 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   email = '';
   otp = '';
   errorMessage = '';
-  successMessage = '';
+  isLoading = false;
 
-  cooldown: number = 0;   // ✅ declare
+  cooldown: number = 0;
   timer: any;
+
+  // Timer for OTP expiry (3 minutes)
+  expirySeconds: number = 180;
+  expiryTimer: any;
 
   constructor(
     private authService: AuthService,
@@ -29,14 +34,57 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.email = localStorage.getItem('verifyEmail') || '';
+    if (!this.email) {
+      this.router.navigate(['/register']);
+      return;
+    }
+    this.initTimers();
+  }
+
+  initTimers() {
+    const sentAt = localStorage.getItem('otpSentAt');
+    if (sentAt) {
+      const now = new Date().getTime();
+      const diffInSeconds = Math.floor((now - parseInt(sentAt)) / 1000);
+
+      // Calculate remaining expiry time (total 180s)
+      const remainingExpiry = 180 - diffInSeconds;
+      if (remainingExpiry > 0) {
+        this.startExpiryTimer(remainingExpiry);
+      } else {
+        this.expirySeconds = 0;
+        this.errorMessage = 'Verification code has expired. Please resend code.';
+      }
+
+      // Calculate remaining cooldown (total 60s)
+      const remainingCooldown = 60 - diffInSeconds;
+      if (remainingCooldown > 0) {
+        this.startCooldown(remainingCooldown);
+      } else {
+        this.cooldown = 0;
+      }
+    } else {
+      // If no timestamp, start fresh and save it
+      const now = new Date().getTime();
+      localStorage.setItem('otpSentAt', now.toString());
+      this.startExpiryTimer(180);
+      this.cooldown = 0;
+    }
   }
 
   verify() {
     if (!this.email || !this.otp) {
-      this.errorMessage = 'Email and OTP are required';
+      this.errorMessage = 'Please enter the 6-digit verification code.';
       return;
     }
 
+    if (this.otp.length < 6) {
+      this.errorMessage = 'Code must be exactly 6 digits.';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
     const dto: VerifyEmailDto = {
       email: this.email,
       otp: this.otp
@@ -44,52 +92,51 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
 
     this.authService.verifyEmail(dto).subscribe({
       next: (res) => {
-        console.log('Verification success:', res);
-        this.toastr.success('Email verified successfully. You can now login.');
+        this.isLoading = false;
+        this.toastr.success('Email verified successfully! You can now login.');
+        localStorage.removeItem('otpSentAt');
+        localStorage.removeItem('verifyEmail');
         setTimeout(() => {
-          console.log('Navigating to login');
           this.router.navigate(['/login']);
         }, 1500);
       },
       error: (err) => {
-        console.error('Verification error:', err);
-        const msg = typeof err.error === 'string' ? err.error : 'Verification failed. Try again.';
-        this.toastr.error(msg);
+        this.isLoading = false;
+        this.errorMessage = typeof err.error === 'string' ? err.error : 'Invalid or expired code.';
       }
     });
   }
 
-  // 🔁 RESEND OTP
   resendOtp() {
     if (!this.email) {
-      this.toastr.error('Please enter your email first');
+      this.toastr.error('Email not found. Please try registering again.');
       return;
     }
 
+    this.errorMessage = '';
+    this.isLoading = true;
     this.authService.resendVerificationCode(this.email).subscribe({
       next: () => {
-        this.toastr.success('Verification code resent');
-        this.startCooldown(60); // 60 sec
+        this.isLoading = false;
+        this.toastr.success('New verification code sent!');
+
+        // Update timestamp for persistence
+        const now = new Date().getTime();
+        localStorage.setItem('otpSentAt', now.toString());
+
+        this.startCooldown(60);
+        this.startExpiryTimer(180);
       },
       error: (err) => {
-        console.error('Resend OTP error:', err);
-        let msg = 'Failed to resend OTP';
-        if (typeof err.error === 'string') {
-          msg = err.error;
-        } else if (err.error && err.error.message) {
-          msg = err.error.message;
-        } else if (err.message) {
-          msg = err.message;
-        }
-        this.toastr.error(msg);
+        this.isLoading = false;
+        this.errorMessage = typeof err.error === 'string' ? err.error : 'Failed to resend code.';
       }
     });
   }
 
-  // ⏳ cooldown logic
   startCooldown(seconds: number) {
     this.cooldown = seconds;
-
+    if (this.timer) clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.cooldown--;
       if (this.cooldown <= 0) {
@@ -98,12 +145,27 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  ngOnDestroy() {
-    if (this.timer) clearInterval(this.timer);
+  startExpiryTimer(seconds: number) {
+    this.expirySeconds = seconds;
+    if (this.expiryTimer) clearInterval(this.expiryTimer);
+    this.expiryTimer = setInterval(() => {
+      this.expirySeconds--;
+      if (this.expirySeconds <= 0) {
+        clearInterval(this.expiryTimer);
+        this.expirySeconds = 0;
+        this.errorMessage = 'Verification code has expired. Please resend code.';
+      }
+    }, 1000);
   }
 
+  formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
 
-
-
-
+  ngOnDestroy() {
+    if (this.timer) clearInterval(this.timer);
+    if (this.expiryTimer) clearInterval(this.expiryTimer);
+  }
 }

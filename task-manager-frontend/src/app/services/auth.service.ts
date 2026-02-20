@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
 interface LoginResponse {
     token: string;
     username: string;
+    isAdmin: boolean;
 }
 
 @Injectable({
@@ -33,8 +34,9 @@ export class AuthService {
         return this.http.post<LoginResponse>(`${this.apiUrl}/login`, dto)
             .pipe(
                 tap(res => {
-                    console.log('Login successful, token received:', res.token);
                     localStorage.setItem(this.tokenKey, res.token);
+                    localStorage.setItem('isAdmin', res.isAdmin.toString());
+                    localStorage.setItem('username', res.username);
                     this.username$.next(res.username);
                 })
             );
@@ -42,6 +44,8 @@ export class AuthService {
 
     logout() {
         localStorage.removeItem(this.tokenKey);
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('username');
         this.username$.next(null);
         this.router.navigate(['/login']);
         this.toastr.success('Logout successful', '', {
@@ -69,15 +73,5 @@ export class AuthService {
         return this.http.post(`${this.apiUrl}/resend-verification`, { email });
     }
 
-    getRole(): string | null {
-        const token = this.getToken();
-        if (!token) return null;
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload['role'] || null;
-        } catch (e) {
-            console.error('Error parsing token:', e);
-            return null;
-        }
-    }
+
 }

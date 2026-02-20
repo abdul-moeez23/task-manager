@@ -13,15 +13,15 @@ namespace TaskManager.API.Services
             _config = config;
         }
 
-        public void SendVerificationEmail(string toEmail, string code)
+        public void SendEmail(string toEmail, string subject, string body)
         {
             var emailMsg = new MimeMessage();
             emailMsg.From.Add(MailboxAddress.Parse(_config["Email:From"]));
             emailMsg.To.Add(MailboxAddress.Parse(toEmail));
-            emailMsg.Subject = "Email Verification Code";
-            emailMsg.Body = new TextPart(MimeKit.Text.TextFormat.Plain)
+            emailMsg.Subject = subject;
+            emailMsg.Body = new TextPart(MimeKit.Text.TextFormat.Html) // diverse content
             {
-                Text = $"Your verification code is: {code}"
+                Text = body
             };
 
             using var smtp = new SmtpClient();
@@ -29,6 +29,11 @@ namespace TaskManager.API.Services
             smtp.Authenticate(_config["Email:Username"], _config["Email:Password"]);
             smtp.Send(emailMsg);
             smtp.Disconnect(true);
+        }
+
+        public void SendVerificationEmail(string toEmail, string code)
+        {
+            SendEmail(toEmail, "Email Verification Code", $"Your verification code is: {code}");
         }
     }
 }
