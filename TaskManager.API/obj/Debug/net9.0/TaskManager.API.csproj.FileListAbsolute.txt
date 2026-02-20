@@ -90,3 +90,4 @@ D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\Ta
 D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\TaskManager.API.runtimeconfig.json
 D:\University\New folder\TaskManager\TaskManager.API\bin\Debug\net9.0\publish\TaskManager.API.staticwebassets.endpoints.json
 D:\University\New folder\TaskManager\TaskManager.API\obj\Debug\net9.0\TaskManager.API.sourcelink.json
+D:\University\New folder\TaskManager\TaskManager.API\obj\Debug\net9.0\swae.build.ex.cache
