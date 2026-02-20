@@ -101,7 +101,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '5.x'   # Match local SDK with .NET 5
+    version: '9.0.x'   # Match local SDK with .NET 9
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 # 2️⃣ Restore NuGet packages (for backend)

@@ -79,7 +79,7 @@ export class UserDashboardComponent {
     agreedToTerms: false
   };
 
-  private apiUrl = 'http://localhost:5124/api/BusinessPartner';
+  private apiUrl = environment.apiUrl + '/BusinessPartner';
 
   constructor(
     public router: Router,
